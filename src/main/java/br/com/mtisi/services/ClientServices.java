@@ -4,8 +4,11 @@ package br.com.mtisi.services;
 import br.com.mtisi.DTO.ClientDTO;
 import br.com.mtisi.entities.Client;
 import br.com.mtisi.repository.ClientRepository;
+import br.com.mtisi.services.exception.DataBaseException;
 import br.com.mtisi.services.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,6 +61,16 @@ public class ClientServices {
             return new ClientDTO(entity);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("ID NOT FOUND" + e);
+        }
+    }
+
+    public void delete(Long id) {
+        try {
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException("ENTITY NOT FOUD " + e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataBaseException("INTEGRETY VIOLATION " + e);
         }
     }
 }
