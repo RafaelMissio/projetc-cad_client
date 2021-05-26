@@ -44,14 +44,6 @@ public class ClientServices {
         return new ClientDTO(entity);
     }
 
-    private void copyDtoToEntity(ClientDTO dto, Client entity) {
-        entity.setName(dto.getName());
-        entity.setCpf(dto.getCpf());
-        entity.setIncome(dto.getIncome());
-        entity.setBirthDate(dto.getBirthDate());
-        entity.setChildren(dto.getChildren());
-    }
-
     @Transactional
     public ClientDTO update(Long id, ClientDTO dto) {
         try {
@@ -64,6 +56,7 @@ public class ClientServices {
         }
     }
 
+    @Transactional
     public void delete(Long id) {
         try {
             repository.deleteById(id);
@@ -73,5 +66,14 @@ public class ClientServices {
             throw new DataBaseException("INTEGRETY VIOLATION " + e);
         }
     }
+
+    private void copyDtoToEntity(ClientDTO dto, Client entity) {
+        entity.setName(dto.getName());
+        entity.setCpf(dto.getCpf());
+        entity.setIncome(dto.getIncome());
+        entity.setBirthDate(dto.getBirthDate());
+        entity.setChildren(dto.getChildren());
+    }
+
 }
 
