@@ -9,6 +9,8 @@ import br.com.mtisi.services.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +26,9 @@ public class ClientServices {
     private ClientRepository repository;
 
     @Transactional(readOnly = true)
-    public List<ClientDTO> findAll() {
-        List<Client> clientList = repository.findAll();
-        return clientList.stream().map(c -> new ClientDTO(c)).collect(Collectors.toList());
+    public Page<ClientDTO> findAllPage(PageRequest pageRequest) {
+        Page<Client> clientList = repository.findAll(pageRequest);
+        return clientList.map(c -> new ClientDTO(c));
     }
 
     @Transactional(readOnly = true)
